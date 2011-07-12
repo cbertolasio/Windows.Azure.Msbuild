@@ -43,13 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AzureTools\Blob.cs" />
     <Compile Include="AzureTools\BlobContainer.cs" />
     <Compile Include="AzureTools\CloudBlobClientFactory.cs" />
     <Compile Include="AzureTools\CloudBlobClientWrapper.cs" />
+    <Compile Include="AzureTools\IBlob.cs" />
     <Compile Include="AzureTools\IBlobContainer.cs" />
     <Compile Include="CopyToAzureStorage.cs" />
     <Compile Include="AzureTools\IBlobClient.cs" />
     <Compile Include="AzureTools\ICloudBlobClientWrapper.cs" />
+    <Compile Include="FileManager.cs" />
+    <Compile Include="IFileManager.cs" />
     <Compile Include="ITaskLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

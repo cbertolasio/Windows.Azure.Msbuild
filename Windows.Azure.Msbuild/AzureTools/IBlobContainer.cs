@@ -6,6 +6,7 @@ namespace Windows.Azure.Msbuild.AzureTools
 {
     public interface IBlobContainer
     {
+        IBlob GetBlobReference(string fileName);
         bool CreateIfNotExists();
     }
 }

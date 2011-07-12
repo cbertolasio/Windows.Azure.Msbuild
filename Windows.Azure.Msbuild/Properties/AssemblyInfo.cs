@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -34,3 +35,28 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+public enum Reason
+{
+    Delegate,
+    Humble,
+    Framework,
+    ThirdParty,
+    Test
+}
+
+public class CoverageExcludeAttribute : Attribute
+{
+    
+    public CoverageExcludeAttribute()
+    {
+
+    }
+
+    public CoverageExcludeAttribute(Reason reason)
+    {
+        Reason = reason;
+    }
+
+    public Reason Reason { get; private set; }
+}
