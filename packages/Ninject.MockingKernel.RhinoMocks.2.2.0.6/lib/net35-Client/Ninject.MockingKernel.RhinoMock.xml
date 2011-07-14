@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Ninject.MockingKernel.RhinoMock</name>
+    </assembly>
+    <members>
+        <member name="T:Ninject.MockingKernel.RhinoMock.RhinoMocksMockingKernel">
+            <summary>
+            The mocking kernel for RhinoMocks
+            </summary>
+        </member>
+        <member name="M:Ninject.MockingKernel.RhinoMock.RhinoMocksMockingKernel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.MockingKernel.RhinoMock.RhinoMocksMockingKernel"/> class.
+            </summary>
+        </member>
+        <member name="M:Ninject.MockingKernel.RhinoMock.RhinoMocksMockingKernel.#ctor(Ninject.INinjectSettings,Ninject.Modules.INinjectModule[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.MockingKernel.RhinoMock.RhinoMocksMockingKernel"/> class.
+            </summary>
+            <param name="settings">The configuration to use.</param>
+            <param name="modules">The modules to load into the kernel.</param>
+        </member>
+        <member name="T:Ninject.MockingKernel.RhinoMock.RhinoMocksMockProvider">
+            <summary>
+            Creates mocked instances via RhinoMocks.
+            </summary>
+        </member>
+        <member name="M:Ninject.MockingKernel.RhinoMock.RhinoMocksMockProvider.Create(Ninject.Activation.IContext)">
+            <summary>
+            Creates an instance within the specified context.
+            </summary>
+            <param name="context">The context.</param>
+            <returns>The created instance.</returns>
+        </member>
+        <member name="M:Ninject.MockingKernel.RhinoMock.RhinoMocksMockProvider.GetCreationCallback">
+            <summary>
+            Gets a callback that creates an instance of the <see cref="T:Ninject.Activation.IProvider"/> that creates the mock.
+            </summary>
+            <returns>The created callback.</returns>
+        </member>
+        <member name="P:Ninject.MockingKernel.RhinoMock.RhinoMocksMockProvider.Type">
+            <summary>
+            Gets the type (or prototype) of instances the provider creates.
+            </summary>
+        </member>
+        <member name="T:Ninject.MockingKernel.RhinoMock.RhinoMocksModule">
+            <summary>
+            The module for rhino mocks
+            </summary>
+        </member>
+        <member name="M:Ninject.MockingKernel.RhinoMock.RhinoMocksModule.Load">
+            <summary>
+            Loads the module into the kernel.
+            </summary>
+        </member>
+    </members>
+</doc>
