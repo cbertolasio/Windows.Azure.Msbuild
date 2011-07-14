@@ -57,8 +57,18 @@
 			<StorageAccountName>devstoreaccount1</StorageAccountName>
 			<StorageAccountKey>Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==</StorageAccountKey>
 			<ContainerName>deployment-packages</ContainerName>
+			<ArtifactDir>TestSourceFiles</ArtifactDir>
 		</PropertyGroup>
-		<CopyToAzureStorage Endpoint="$(Endpoint)" StorageAccountName="$(StorageAccountName)" StorageAccountKey="$(StorageAccountKey)" ContainerName="$(ContainerName)" />
+		
+		<ItemGroup>
+			<AzurePackageFiles Include="$(ArtifactDir)\**\*.cspkg;$(ArtifactDir)\**\*.cscfg" />
+		</ItemGroup>
+
+		<Message Text="ArtifacDir: $(ArtifactDir)" />
+		<Message Text="AzurePackageFiles: @(AzurePackageFiles)" />
+		<CopyToAzureStorage Endpoint="$(Endpoint)" StorageAccountName="$(StorageAccountName)" StorageAccountKey="$(StorageAccountKey)"
+							ContainerName="$(ContainerName)"
+							SourceFiles="@(AzurePackageFiles)" DestinationFiles="@(AzurePackageFiles ->'%(RecursiveDir)%(FileName)%(Extension)')"  />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

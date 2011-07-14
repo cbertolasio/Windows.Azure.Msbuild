@@ -20,6 +20,8 @@ namespace Windows.Azure.Msbuild.Test
         [TestCase("http://test123test.com", "accountName2", "accountKe3")]
         public void Execute_CreatesCloudStorageClient(string uri, string accountName, string accountKey)
         {
+            storageFactory.BackToRecord();
+            storageFactory.Replay();
 
             storageFactory.Expect(it => it.Create(new Uri(uri), accountName, accountKey)).Return(blobClient);
             blobClient.Stub(it => it.GetContainerReference(task.ContainerName)).Return(blobContainer);
@@ -37,6 +39,11 @@ namespace Windows.Azure.Msbuild.Test
         [TestCase("container2")]
         public void Task_Creates_TargetContainer(string containerName)
         {
+            blobClient.BackToRecord();
+            blobClient.Replay();
+            blobContainer.BackToRecord();
+            blobContainer.Replay();
+
             task.ContainerName = containerName;
             storageFactory.Stub(it => it.Create(new Uri(uri), accountName, accountKey)).Return(blobClient);
             blobClient.Expect(it => it.GetContainerReference(task.ContainerName)).Return(blobContainer);
