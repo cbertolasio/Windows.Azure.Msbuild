@@ -23,9 +23,11 @@ Ok, so here is what you need to do...
 
 These values below are the default local / development storage values that are common to all out of the box Windows Azure SDK installations.
 
-* Endpoint: "http://127.0.0.:10000/devstoreaccount1"
+* Endpoint: \http://127.0.0.:10000/devstoreaccount1
 * StorageAccountName: devstoreaccount1
 * StorageAccountKey: Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
 
-# Noteworthy Files #
+## Noteworthy Files
 [CopyToAzureStorage.cs] (https://github.com/cbertolasio/Windows.Azure.Msbuild/blob/master/Windows.Azure.Msbuild/CopyToAzureStorage.cs) -> is the code for the custom task
+[CopyToAzureStorageTest.cs] (https://github.com/cbertolasio/Windows.Azure.Msbuild/blob/master/Windows.Azure.Msbuild.Test/CopyToAzureStorageTest.cs) -> contains the unit test for the msbuild tasks
+[AzureTools] (https://github.com/cbertolasio/Windows.Azure.Msbuild/tree/master/Windows.Azure.Msbuild/AzureTools) -> contains the abstractions for the Managed Azure Storage API
