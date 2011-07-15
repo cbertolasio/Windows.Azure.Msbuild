@@ -31,3 +31,4 @@ These values below are the default local / development storage values that are c
 * [CopyToAzureStorage.cs] (https://github.com/cbertolasio/Windows.Azure.Msbuild/blob/master/Windows.Azure.Msbuild/CopyToAzureStorage.cs) -> is the code for the custom task
 * [CopyToAzureStorageTest.cs] (https://github.com/cbertolasio/Windows.Azure.Msbuild/blob/master/Windows.Azure.Msbuild.Test/CopyToAzureStorageTest.cs) -> contains the unit test for the msbuild tasks
 * [AzureTools] (https://github.com/cbertolasio/Windows.Azure.Msbuild/tree/master/Windows.Azure.Msbuild/AzureTools) -> contains the abstractions for the Managed Azure Storage API
+* [Build.msbuild] (https://github.com/cbertolasio/Windows.Azure.Msbuild/blob/master/Build/build.msbuild) -> is a sample msbuild file that can be run in your environment to test the custom task
