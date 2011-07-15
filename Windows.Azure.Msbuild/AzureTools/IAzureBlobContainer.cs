@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Windows.Azure.Msbuild.AzureTools
 {
-    public interface IBlobContainer
+    public interface IAzureBlobContainer
     {
-        IBlob GetBlobReference(string fileName);
+        IAzureBlob GetBlobReference(string fileName);
         bool CreateIfNotExists();
     }
 }

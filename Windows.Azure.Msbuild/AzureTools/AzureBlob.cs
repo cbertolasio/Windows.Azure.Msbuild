@@ -7,7 +7,7 @@ using System.IO;
 namespace Windows.Azure.Msbuild.AzureTools
 {
     [CoverageExclude(Reason.Delegate)]
-    public class Blob : IBlob
+    public class AzureBlob : IAzureBlob
     {
         public bool DeleteIfExists()
         {
@@ -24,7 +24,7 @@ namespace Windows.Azure.Msbuild.AzureTools
             cloudBlob.UploadFile(fileName);
         }
 
-        public Blob(CloudBlob cloudBlob)
+        public AzureBlob(CloudBlob cloudBlob)
         {
             this.cloudBlob = cloudBlob;
         }

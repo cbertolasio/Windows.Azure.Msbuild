@@ -6,12 +6,12 @@ using Microsoft.WindowsAzure.StorageClient;
 namespace Windows.Azure.Msbuild.AzureTools
 {
     [CoverageExclude(Reason.Delegate)]
-    public class BlobContainer : IBlobContainer
+    public class AzureBlobContainer : IAzureBlobContainer
     {
-        public IBlob GetBlobReference(string fileName)
+        public IAzureBlob GetBlobReference(string fileName)
         {
             var blob = container.GetBlobReference(fileName);
-            return new Blob(blob);
+            return new AzureBlob(blob);
         }
 
         public bool CreateIfNotExists()
@@ -19,7 +19,7 @@ namespace Windows.Azure.Msbuild.AzureTools
             return container.CreateIfNotExist();
         }
 
-        public BlobContainer(CloudBlobContainer container)
+        public AzureBlobContainer(CloudBlobContainer container)
         {
             this.container = container;
         }

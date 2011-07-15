@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Windows.Azure.Msbuild.AzureTools
 {
-    public interface IBlob
+    public interface IAzureBlob
     {
         bool DeleteIfExists();
         void UploadFromStream(Stream stream);

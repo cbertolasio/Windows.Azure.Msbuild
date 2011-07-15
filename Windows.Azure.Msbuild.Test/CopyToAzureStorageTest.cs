@@ -39,10 +39,8 @@ namespace Windows.Azure.Msbuild.Test
         [TestCase("container2")]
         public void Task_Creates_TargetContainer(string containerName)
         {
-            blobClient.BackToRecord();
-            blobClient.Replay();
-            blobContainer.BackToRecord();
-            blobContainer.Replay();
+            blobClient.ClearBehavior();
+            blobContainer.ClearBehavior();
 
             task.ContainerName = containerName;
             storageFactory.Stub(it => it.Create(new Uri(uri), accountName, accountKey)).Return(blobClient);
@@ -95,14 +93,9 @@ namespace Windows.Azure.Msbuild.Test
             task.SourceFiles = sourceFiles;
             task.DestinationFiles = destinationFiles;
 
-            fileManager.BackToRecord();
-            fileManager.Replay();
+            fileManager.ClearBehavior();
             fileManager.Expect(it => it.GetFile(Arg<string>.Is.NotNull)).Return(stream);
-            //blob.Stub(it => it.DeleteIfExists()).Return(true).Repeat.AtLeastOnce();
-            //storageFactory.Stub(it => it.Create(Arg<Uri>.Is.NotNull, Arg<string>.Is.NotNull, Arg<string>.Is.NotNull)).Return(blobClient);
-            //blobClient.Stub(it => it.GetContainerReference(Arg<string>.Is.NotNull)).Return(blobContainer);
-            //blobContainer.Stub(it => it.GetBlobReference(Arg<string>.Is.NotNull)).Repeat.AtLeastOnce().Return(blob);
-
+            
             task.Execute();
 
             fileManager.VerifyAllExpectations();
@@ -114,48 +107,21 @@ namespace Windows.Azure.Msbuild.Test
         {
             task.SourceFiles = sourceFiles;
             task.DestinationFiles = destinationFiles;
-
-            //blob.Stub(it => it.DeleteIfExists()).Return(true).Repeat.AtLeastOnce();
-            //storageFactory.Stub(it => it.Create(Arg<Uri>.Is.NotNull, Arg<string>.Is.NotNull, Arg<string>.Is.NotNull)).Return(blobClient);
-            //blobClient.Stub(it => it.GetContainerReference(Arg<string>.Is.NotNull)).Return(blobContainer);
-            //blobContainer.Stub(it => it.GetBlobReference(Arg<string>.Is.NotNull)).Repeat.AtLeastOnce().Return(blob);
-            //fileManager.Stub(it => it.GetFile(Arg<string>.Is.NotNull)).Return(stream);
-
+            
             task.Execute();
 
             blob.AssertWasCalled(it => it.UploadFromStream(Arg<Stream>.Is.NotNull), opt => opt.Repeat.Times(task.DestinationFiles.Count()));
-        }
-
-
-
-        private static IEnumerable GetBlobReferenceDataSource()
-        {
-            var kernel = new RhinoMocksMockingKernel();
-            var sourceItem1 = kernel.Get<ITaskItem>();
-            sourceItem1.Stub(it => it.ItemSpec).Return("file1.txt");
-            var sourceItem2 = kernel.Get<ITaskItem>();
-            sourceItem2.Stub(it => it.ItemSpec).Return("file2.txt");
-            var sourceFiles = new ITaskItem[] { sourceItem1, sourceItem2 };
-
-
-            var destItem1 = kernel.Get<ITaskItem>();
-            destItem1.Stub(it => it.ItemSpec).Return("prd\file1.txt");
-            var destItem2 = kernel.Get<ITaskItem>();
-            destItem2.Stub(it => it.ItemSpec).Return("prd\file2.txt");
-            var destinationFiles = new ITaskItem[] { destItem1, destItem2 };
-
-            yield return new TestCaseData(sourceFiles, destinationFiles);
         }
 
         [SetUp]
         public void Setup()
         {
             kernel = new RhinoMocksMockingKernel();
-            blobContainer = kernel.Get<IBlobContainer>();
+            blobContainer = kernel.Get<IAzureBlobContainer>();
             logger = kernel.Get<ITaskLogger>();
-            storageFactory = kernel.Get<ICloudBlobClientWrapper>();
-            blobClient = kernel.Get<IBlobClient>();
-            blob = kernel.Get<IBlob>();
+            storageFactory = kernel.Get<IAzureBlobClientFactory>();
+            blobClient = kernel.Get<IAzureBlobClient>();
+            blob = kernel.Get<IAzureBlob>();
             fileManager = kernel.Get<IFileManager>();
 
             stream = new MemoryStream(Encoding.ASCII.GetBytes("this is a test stream \r\n this is a test stream"));
@@ -180,17 +146,35 @@ namespace Windows.Azure.Msbuild.Test
             task.DestinationFiles = new ITaskItem[] { };
         }
 
+        private static IEnumerable GetBlobReferenceDataSource()
+        {
+            var kernel = new RhinoMocksMockingKernel();
+            var sourceItem1 = kernel.Get<ITaskItem>();
+            sourceItem1.Stub(it => it.ItemSpec).Return("file1.txt");
+            var sourceItem2 = kernel.Get<ITaskItem>();
+            sourceItem2.Stub(it => it.ItemSpec).Return("file2.txt");
+            var sourceFiles = new ITaskItem[] { sourceItem1, sourceItem2 };
+
+
+            var destItem1 = kernel.Get<ITaskItem>();
+            destItem1.Stub(it => it.ItemSpec).Return("prd\file1.txt");
+            var destItem2 = kernel.Get<ITaskItem>();
+            destItem2.Stub(it => it.ItemSpec).Return("prd\file2.txt");
+            var destinationFiles = new ITaskItem[] { destItem1, destItem2 };
+
+            yield return new TestCaseData(sourceFiles, destinationFiles);
+        }
 
         private string accountKey;
         private string accountName;
-        private IBlob blob;
-        private IBlobClient blobClient;
-        private IBlobContainer blobContainer;
+        private IAzureBlob blob;
+        private IAzureBlobClient blobClient;
+        private IAzureBlobContainer blobContainer;
         private IFileManager fileManager;
         private ITaskLogger logger;
         private MemoryStream stream;
         private CopyToAzureStorage task;
-        private ICloudBlobClientWrapper storageFactory;
+        private IAzureBlobClientFactory storageFactory;
         private string uri;
         private RhinoMocksMockingKernel kernel;
     }

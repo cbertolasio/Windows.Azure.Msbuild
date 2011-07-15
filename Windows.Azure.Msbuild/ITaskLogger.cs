@@ -10,21 +10,4 @@ namespace Windows.Azure.Msbuild
     {
         void LogMessage(string message, params object[] args);
     }
-
-    public class MyTaskLogger : ITaskLogger
-    {
-
-        public MyTaskLogger(ITask taskInstance)
-        {
-            logger = new TaskLoggingHelper(taskInstance);
-        }
-
-        public void LogMessage(string message, params object[] args)
-        {
-            logger.LogMessage(message, args);
-        }
-
-        private TaskLoggingHelper logger;
-    }
 }
-
