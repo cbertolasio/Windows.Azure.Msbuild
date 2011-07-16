@@ -1,0 +1,17 @@
+
+
+
+
+is this what you are looking for?
+ 
+CloudStorageAccount account = CloudStorageAccount.Parse(Program.ConnectionString);
+CloudBlobClient blobClient = account.CreateCloudBlobClient();
+
+CloudBlobContainer container = blobClient.GetContainerReference("somecontainer");
+CloudBlob blob = container.GetBlobReference("someblob.txt");
+Uri blobUri = blob.Uri;
+// blob uri without https is = string.Format("{0}{1}", blobUri.Host, blobUri.PathAndQuery);
+ 
+Thanks,
+ 
+Jai

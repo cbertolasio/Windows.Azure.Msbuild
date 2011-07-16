@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.WindowsAzure.StorageClient;
+using System.IO;
 
 namespace Windows.Azure.Msbuild.AzureTools
 {
@@ -12,6 +13,12 @@ namespace Windows.Azure.Msbuild.AzureTools
         {
             var blob = container.GetBlobReference(fileName);
             return new AzureBlob(blob);
+        }
+
+        public IAzureBlob GetBlockBlobReference(string fileName)
+        {
+            var blob = container.GetBlockBlobReference(fileName);
+            return new AzureBlockBlob(blob);
         }
 
         public bool CreateIfNotExists()

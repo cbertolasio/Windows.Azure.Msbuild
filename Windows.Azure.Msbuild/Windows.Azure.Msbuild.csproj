@@ -47,6 +47,7 @@
     <Compile Include="AzureTools\AzureBlobContainer.cs" />
     <Compile Include="AzureTools\AzureBlobClientFactory.cs" />
     <Compile Include="AzureTools\AzureBlobClient.cs" />
+    <Compile Include="AzureTools\AzureBlockBlob.cs" />
     <Compile Include="AzureTools\IAzureBlob.cs" />
     <Compile Include="AzureTools\IAzureBlobContainer.cs" />
     <Compile Include="CopyToAzureStorage.cs" />

@@ -6,7 +6,7 @@ namespace Windows.Azure.Msbuild.AzureTools
 {
     public interface IAzureBlobClientFactory
     {
-        IAzureBlobClient Create(Uri endpoint, string accountName, string accountKey);
+        IAzureBlobClient Create(Uri endpoint, string accountName, string accountKey, int timeout, int parallelOperationCount);
     }
 }
 

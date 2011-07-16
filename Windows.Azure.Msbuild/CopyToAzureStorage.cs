@@ -17,33 +17,24 @@ namespace Windows.Azure.Msbuild
             logger.LogMessage(msg, Endpoint, StorageAccountKey, StorageAccountName);
 
             var endpoint = new Uri(Endpoint);
-            var client = blobClientWrapper.Create(endpoint, StorageAccountName, StorageAccountKey);
+            var client = blobClientWrapper.Create(endpoint, StorageAccountName, StorageAccountKey, StorageClientTimeoutInMinutes, ParallelOptionsThreadCount);
             var container = client.GetContainerReference(ContainerName);
-            if (container.CreateIfNotExists())
-            {
+            if (container.CreateIfNotExists()) {
                 logger.LogMessage(Resources.Msg_ContainerCreated, ContainerName);
             }
 
-            for (int i = 0; i < SourceFiles.Length; i++)
-            {
+            for (int i = 0; i < SourceFiles.Length; i++) {
                 var pathToSource = SourceFiles[i].ItemSpec;
                 var pathToDest = (DestinationFiles != null) ? DestinationFiles[i].ItemSpec : Path.GetFileName(pathToSource);
-                var contentType = SourceFiles[i].GetMetadata("ContentType");
 
-                if (String.IsNullOrEmpty(contentType))
-                {
-                    var blob = container.GetBlobReference(pathToDest);
-                    if (blob.DeleteIfExists())
-                    {
-                        logger.LogMessage(Resources.Msg_DeletedBlob, pathToDest);
-                    }
+                var blob = container.GetBlockBlobReference(pathToDest);
+                if (blob.DeleteIfExists()) {
+                    logger.LogMessage(Resources.Msg_DeletedBlob, pathToDest);
+                }
 
-                    using (Stream stream = fileManager.GetFile(pathToSource))
-                    {
-                        blob.UploadFromStream(stream);
-                        logger.LogMessage(Resources.Msg_UploadedBlob, pathToSource);
-                    }
-
+                using (Stream stream = fileManager.GetFile(pathToSource)) {
+                    blob.UploadFromStream(stream);
+                    logger.LogMessage(Resources.Msg_UploadedBlob, pathToSource);
                 }
             }
 
@@ -66,6 +57,9 @@ namespace Windows.Azure.Msbuild
             this.logger = taskLogger;
             this.fileManager = fileManager;
             this.blobClientWrapper = blobClientWrapper;
+
+            this.StorageClientTimeoutInMinutes = 30;
+            this.ParallelOptionsThreadCount = 1;
         }
 
         [Required]
@@ -85,6 +79,10 @@ namespace Windows.Azure.Msbuild
 
         [Required]
         public string StorageAccountName { get; set; }
+
+        public int StorageClientTimeoutInMinutes { get; set; }
+
+        public int ParallelOptionsThreadCount { get; set; }
 
         private readonly IAzureBlobClientFactory blobClientWrapper;
         private readonly IFileManager fileManager;

@@ -23,10 +23,12 @@ namespace Windows.Azure.Msbuild.AzureTools
             return new AzureBlob(blob);
         }
 
-        public AzureBlobClient(Uri endpoint, string accountName, string accountKey)
+        public AzureBlobClient(Uri endpoint, string accountName, string accountKey, int timeoutInMinutes = 30, int parallelOperationThreadCount = 1)
         {
             var credentials = new StorageCredentialsAccountAndKey(accountName, accountKey);
             blobClient = new CloudBlobClient(endpoint, credentials);
+            blobClient.Timeout = new TimeSpan(0, timeoutInMinutes, 0);
+            blobClient.ParallelOperationThreadCount = parallelOperationThreadCount;
         }
 
         private readonly CloudBlobClient blobClient;

@@ -20,10 +20,10 @@ namespace Windows.Azure.Msbuild.Test
         [TestCase("http://test123test.com", "accountName2", "accountKe3")]
         public void Execute_CreatesCloudStorageClient(string uri, string accountName, string accountKey)
         {
-            storageFactory.BackToRecord();
-            storageFactory.Replay();
+            storageFactory.ClearBehavior();
+            blobClient.ClearBehavior();
 
-            storageFactory.Expect(it => it.Create(new Uri(uri), accountName, accountKey)).Return(blobClient);
+            storageFactory.Expect(it => it.Create(new Uri(uri), accountName, accountKey, task.StorageClientTimeoutInMinutes, task.ParallelOptionsThreadCount)).Return(blobClient);
             blobClient.Stub(it => it.GetContainerReference(task.ContainerName)).Return(blobContainer);
             blobContainer.Stub(it => it.CreateIfNotExists()).Return(true);
                         
@@ -43,7 +43,7 @@ namespace Windows.Azure.Msbuild.Test
             blobContainer.ClearBehavior();
 
             task.ContainerName = containerName;
-            storageFactory.Stub(it => it.Create(new Uri(uri), accountName, accountKey)).Return(blobClient);
+            storageFactory.Stub(it => it.Create(new Uri(uri), accountName, accountKey, 30, 2)).Return(blobClient);
             blobClient.Expect(it => it.GetContainerReference(task.ContainerName)).Return(blobContainer);
             blobContainer.Expect(it => it.CreateIfNotExists()).Return(true);
 
@@ -54,12 +54,12 @@ namespace Windows.Azure.Msbuild.Test
         }
 
         [TestCaseSource("GetBlobReferenceDataSource")]
-        public void Task_Gets_BlobReference(ITaskItem[] sourceFiles, ITaskItem[] destinationFiles)
+        public void Task_Gets_BlockBlobReference(ITaskItem[] sourceFiles, ITaskItem[] destinationFiles)
         {
             
-            storageFactory.Stub(it => it.Create(Arg<Uri>.Is.NotNull, Arg<string>.Is.NotNull, Arg<string>.Is.NotNull)).Return(blobClient);
+            storageFactory.Stub(it => it.Create(Arg<Uri>.Is.NotNull, Arg<string>.Is.NotNull, Arg<string>.Is.NotNull, Arg<int>.Is.Anything, Arg<int>.Is.Anything)).Return(blobClient);
             blobClient.Stub(it => it.GetContainerReference(Arg<string>.Is.NotNull)).Return(blobContainer);
-            blobContainer.Expect(it => it.GetBlobReference(Arg<string>.Is.NotNull)).Repeat.AtLeastOnce().Return(blob);    
+            blobContainer.Expect(it => it.GetBlockBlobReference(Arg<string>.Is.NotNull)).Repeat.AtLeastOnce().Return(blob);    
                 
             task.SourceFiles = sourceFiles;
             task.DestinationFiles = destinationFiles;
@@ -68,7 +68,7 @@ namespace Windows.Azure.Msbuild.Test
             task.Execute();
 
             // assert
-            blobContainer.AssertWasCalled(it => it.GetBlobReference(Arg<string>.Is.NotNull), opt => opt.Repeat.Times(task.SourceFiles.Count()));
+            blobContainer.AssertWasCalled(it => it.GetBlockBlobReference(Arg<string>.Is.NotNull), opt => opt.Repeat.Times(task.SourceFiles.Count()));
         }
 
         [TestCaseSource("GetBlobReferenceDataSource")]
@@ -78,7 +78,7 @@ namespace Windows.Azure.Msbuild.Test
             task.DestinationFiles = destinationFiles;
 
             blob.Expect(it => it.DeleteIfExists()).Return(true).Repeat.Times(task.DestinationFiles.Count());
-            storageFactory.Stub(it => it.Create(Arg<Uri>.Is.NotNull, Arg<string>.Is.NotNull, Arg<string>.Is.NotNull)).Return(blobClient);
+            storageFactory.Stub(it => it.Create(Arg<Uri>.Is.NotNull, Arg<string>.Is.NotNull, Arg<string>.Is.NotNull, Arg<int>.Is.Anything, Arg<int>.Is.Anything)).Return(blobClient);
             blobClient.Stub(it => it.GetContainerReference(Arg<string>.Is.NotNull)).Return(blobContainer);
             blobContainer.Stub(it => it.GetBlobReference(Arg<string>.Is.NotNull)).Repeat.AtLeastOnce().Return(blob);    
 
@@ -127,9 +127,9 @@ namespace Windows.Azure.Msbuild.Test
             stream = new MemoryStream(Encoding.ASCII.GetBytes("this is a test stream \r\n this is a test stream"));
 
             blob.Stub(it => it.DeleteIfExists()).Return(true).Repeat.AtLeastOnce();
-            storageFactory.Stub(it => it.Create(Arg<Uri>.Is.NotNull, Arg<string>.Is.NotNull, Arg<string>.Is.NotNull)).Return(blobClient);
+            storageFactory.Stub(it => it.Create(Arg<Uri>.Is.NotNull, Arg<string>.Is.NotNull, Arg<string>.Is.NotNull, Arg<int>.Is.Anything, Arg<int>.Is.Anything)).Return(blobClient);
             blobClient.Stub(it => it.GetContainerReference(Arg<string>.Is.NotNull)).Return(blobContainer);
-            blobContainer.Stub(it => it.GetBlobReference(Arg<string>.Is.NotNull)).Repeat.AtLeastOnce().Return(blob);
+            blobContainer.Stub(it => it.GetBlockBlobReference(Arg<string>.Is.NotNull)).Repeat.AtLeastOnce().Return(blob);
             fileManager.Stub(it => it.GetFile(Arg<string>.Is.NotNull)).Return(stream);
 
             task = kernel.Get<CopyToAzureStorage>();
