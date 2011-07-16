@@ -21,4 +21,5 @@ Thumbs.db
 *.cache
 *.log
 *.swp
-*.user
+*.userbuild.msbuild
+build.msbuild
