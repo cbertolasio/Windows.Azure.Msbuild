@@ -1,0 +1,28 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="ShipItToTheCloud">
+	<UsingTask AssemblyFile="$(MSBuildProjectDirectory)\..\Windows.Azure.Msbuild\bin\debug\Windows.Azure.Msbuild.dll" TaskName="CopyToAzureStorage" />
+
+	<Target Name="ShipItToTheCloud">
+		<PropertyGroup>
+			<Endpoint>http://127.0.0.1:10000/devstoreaccount1</Endpoint>
+			<StorageAccountName>devstoreaccount1</StorageAccountName>
+			<StorageAccountKey>Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==</StorageAccountKey>
+			<ContainerName>deployment-packages</ContainerName>
+			<ArtifactDir>TestSourceFiles</ArtifactDir>
+		</PropertyGroup>
+		
+		<ItemGroup>
+			<AzurePackageFiles Include="$(ArtifactDir)\**\*.cspkg;$(ArtifactDir)\**\*.cscfg" />
+		</ItemGroup>
+
+		<Message Text="ArtifacDir: $(ArtifactDir)" />
+		<Message Text="AzurePackageFiles: @(AzurePackageFiles)" />
+		
+		<CopyToAzureStorage Endpoint="$(Endpoint)" 
+							StorageAccountName="$(StorageAccountName)" 
+							StorageAccountKey="$(StorageAccountKey)"
+							ContainerName="$(ContainerName)"
+							SourceFiles="@(AzurePackageFiles)" 
+							DestinationFiles="@(AzurePackageFiles ->'%(RecursiveDir)%(FileName)%(Extension)')"  />
+	</Target>
+
+</Project>
