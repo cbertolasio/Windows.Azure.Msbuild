@@ -7,7 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows.Azure.Msbuild.Test"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9AEF78D1-73FB-4A61-860A-F37220A75225}"
 	ProjectSection(SolutionItems) = preProject
-		Build\build.msbuild = Build\build.msbuild
 		readme.md = readme.md
 	EndProjectSection
 EndProject

@@ -27,6 +27,12 @@ These values below are the default local / development storage values that are c
 * StorageAccountName: devstoreaccount1
 * StorageAccountKey: Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
 
+When shipping files to the REAL Azure Storage account, the Endpoint, StorageAccountName, and StorageAccountKey should be taken from the Windows Azure Portal
+
+* Endpoint - https://{YourStorageAccountName}.blob.core.windows.net/
+* StorageAccountName - {YourStorageAccountName} - taken from the Azure Portal
+* StorageAccountKey - {Your Access Key} - taken from the Azure Portal
+
 ## Noteworthy Files
 * [CopyToAzureStorage.cs] (https://github.com/cbertolasio/Windows.Azure.Msbuild/blob/master/Windows.Azure.Msbuild/CopyToAzureStorage.cs) -> is the code for the custom task
 * [CopyToAzureStorageTest.cs] (https://github.com/cbertolasio/Windows.Azure.Msbuild/blob/master/Windows.Azure.Msbuild.Test/CopyToAzureStorageTest.cs) -> contains the unit test for the msbuild tasks
