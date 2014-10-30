@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.WindowsAzure.StorageClient;
 using System.IO;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Windows.Azure.Msbuild.AzureTools
 {
@@ -21,15 +21,15 @@ namespace Windows.Azure.Msbuild.AzureTools
 
         public void UploadFile(string fileName)
         {
-            cloudBlob.UploadFile(fileName);
+            cloudBlob.UploadFromFile(fileName, FileMode.Create);
         }
 
-        public AzureBlob(CloudBlob cloudBlob)
+        public AzureBlob(ICloudBlob cloudBlob)
         {
             this.cloudBlob = cloudBlob;
         }
 
-        private readonly CloudBlob cloudBlob;
+        private readonly ICloudBlob cloudBlob;
     }
 }
 

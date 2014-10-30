@@ -1,17 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.WindowsAzure.StorageClient;
 using System.IO;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Windows.Azure.Msbuild.AzureTools
 {
     [CoverageExclude(Reason.Delegate)]
     public class AzureBlobContainer : IAzureBlobContainer
     {
+        public DateTimeOffset? LastModified
+        {
+            get { return container.Properties.LastModified; }
+        }
+
         public IAzureBlob GetBlobReference(string fileName)
         {
-            var blob = container.GetBlobReference(fileName);
+            var blob = container.GetBlobReferenceFromServer(fileName);
             return new AzureBlob(blob);
         }
 
@@ -23,7 +28,7 @@ namespace Windows.Azure.Msbuild.AzureTools
 
         public bool CreateIfNotExists()
         {
-            return container.CreateIfNotExist();
+            return container.CreateIfNotExists();
         }
 
         public AzureBlobContainer(CloudBlobContainer container)
@@ -32,6 +37,11 @@ namespace Windows.Azure.Msbuild.AzureTools
         }
 
         private readonly CloudBlobContainer container;
+        
+        public void Delete()
+        {
+            container.Delete();
+        }
     }
 }
 

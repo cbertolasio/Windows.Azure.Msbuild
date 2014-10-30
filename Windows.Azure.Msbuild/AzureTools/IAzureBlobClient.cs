@@ -7,6 +7,9 @@ namespace Windows.Azure.Msbuild.AzureTools
     public interface IAzureBlobClient
     {
         IAzureBlob GetBlobReference(string fileName);
+
+        IEnumerable<IAzureBlobContainer> GetAllContainerReferences();
+
         IAzureBlobContainer GetContainerReference(string containerName);
     }
 }
