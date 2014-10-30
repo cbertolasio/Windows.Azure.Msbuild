@@ -1,6 +1,6 @@
 ## Overview 
 
-This repo contains a custom MSBuild Tasks:
+This repo contains two custom MSBuild Tasks:
 * CopyToAzureStorage - that will allow you to copy files of your choosing to from your build server's artifact directory into a Windows Azure Cloud Storage Container.
 * CleanupAzureStorageContainers - that allows you cleanup a storage account based on the Last Modified. You can specify how many containers you want to keep in the account.
 
@@ -10,7 +10,7 @@ Ok, so here is what you need to do...
 
 * Download the code from this repo
 * Compile it
-* In your MSBuild script, make a reference to the 'CopyToAzureStorage' task (i.e. the task in this repo)
+* In your MSBuild script, make a reference to the 'CopyToAzureStorage' or 'CleanupAzureStorageContainers' task (i.e. the task in this repo)
 
 ## What properties do I need to set?
 Both tasks:
@@ -23,8 +23,8 @@ CopyToAzureStorage
 * SourceFiles - this is the list of files that you want to copy into your cloud container
 * DestinationFiles - this is a list that allows you to specify what the target files will be
 
-RemainingContainers
-* DestinationFiles - the number of containers you want remaining in the storage account
+CleanupAzureStorageContainers
+* RemainingContainers - the number of containers you want remaining in the storage account
 
 ### Note #
 
